@@ -516,7 +516,6 @@ class Shop extends  Authenticatable
         return $collection;
     }
 
-
     //0审核；1支付商户号 2绑定微信号 3域名更换 4审核完成 5打烊
     public static function platSelectShop($row){
         $collection=self::orderBy('created_at','desc')->paginate($row);

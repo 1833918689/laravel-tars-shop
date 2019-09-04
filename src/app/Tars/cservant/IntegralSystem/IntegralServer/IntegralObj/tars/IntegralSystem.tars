@@ -1,0 +1,74 @@
+module integraltafserviceservant
+{
+    struct resultMsg {
+        0 require int code=200; //返回码
+        1 optional string error; //返回信息
+    };
+
+    struct InUpdateUserAccount {
+        0 require string uuid;//用户ID
+        1 require float points;//积分数量
+        2 require int type;//1.增加;2.扣除;
+        3 require int mark;//1，充值；2：购物获得；3：抢红包获得；4：完成传播任务；5：分销获得；6：商家群大厅收取；7，核销定金券赠送；8，红包过期返还；9，传播过期返还；-1，提现；-2：购买赠送；-3：发红包；-4：发布传播任务；-5：分销佣金；-6：用户入群扣除；-7，核销定金券赠送；-8，pos机收款手续费；0：注册赠送；
+        4 require int env_domain_id;
+    };
+
+    struct InUpdateShopAccount {
+            0 require string shop_id;//店铺ID
+            1 require float points;//积分数量
+            2 require int type;//1.增加;2.扣除;
+            3 require int mark;//1，充值；2：购物获得；3：抢红包获得；4：完成传播任务；5：分销获得；6：商家群大厅收取；7，核销定金券赠送；8，红包过期返还；9，传播过期返还；-1，提现；-2：购买赠送；-3：发红包；-4：发布传播任务；-5：分销佣金；-6：用户入群扣除；-7，核销定金券赠送；-8，pos机收款手续费；0：注册赠送；
+            4 require int env_domain_id;
+    };
+
+    struct InReleasePropagation {
+        0 require string shop_id;//店铺id
+        1 require float points;//传播任务积分
+        2 require string end_time;//结束时间
+        3 require int env_domain_id;//平台id
+    };
+
+
+    struct InReceiveIntegral {
+        0 require string uuid;//用户ID；
+        1 require float points;//领取积分数量;
+        2 require string withholding_code;//传播任务码；
+    };
+
+    struct InNotify {
+        0 require string code;//单号
+        1 require string paid;//是否支付
+    };
+
+    struct InTransaction {
+        0 require string uuid;
+        1 require int shop_id;
+        2 require float points;
+        3 require string type_mark; //propagation传播,dist分销,buy购物,
+    };
+
+    interface IntegralTafService {
+        //测试
+        void testSever(string in, out resultMsg OurParams);
+        //创建用户积分账户
+        void notifyUserRegister(string uuid, out resultMsg OurParams);
+        //创建店铺积分账户
+        void notifyShopRegister(string shop_id, out resultMsg OurParams );
+        //更新用户账户积分信息
+        void updateAccountInfo(InUpdateUserAccount params, out resultMsg OurParams);
+        //更新店铺账户积分信息
+        void updateShopInfo(InUpdateShopAccount params, out resultMsg OurParams);
+        //积分交易
+        void integralTransaction(InTransaction params, out resultMsg OurParams);
+        //账户剩余积分
+        void integralBalance(string uuid, string shop_id, out float points, out resultMsg OutParams);
+        //发布传播积分预扣
+        void releasePropagation(InReleasePropagation params, out string code, out resultMsg OutParams);
+        //用户领取积分
+        void receiveIntegral(InReceiveIntegral params, out resultMsg OutParams);
+        //积分充值回调
+        void notifyRecharge(InNotify params, out resultMsg OutParams);
+        //积分提现回调
+        void notifyDraw(InNotify params, out resultMsg OutParams);
+    };
+};

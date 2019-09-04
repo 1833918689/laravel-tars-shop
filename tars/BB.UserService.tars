@@ -1,0 +1,12 @@
+module UserService
+{
+    interface Auth {
+        string getUuidByToken(string token);
+    };
+
+    interface Misc
+    {
+        string hi(string name);
+    };
+
+};

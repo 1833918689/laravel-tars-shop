@@ -1,0 +1,153 @@
+module PAY
+{
+//测试结构体
+     struct SimpleStruct {
+             0 require long id=0;
+             1 require int count=0;
+             2 require short page=0;
+         };
+
+         struct OutStruct {
+             0 require long id=0;
+             1 require int count=0;
+             2 require short page=0;
+             3 optional string str;
+         };
+
+         struct ComplicatedStruct {
+             0 require vector<SimpleStruct> ss;
+             1 require SimpleStruct rs;
+             2 require map<string, SimpleStruct> mss;
+             3 optional string str;
+         };
+
+         struct LotofTags {
+             0 require long id=0;
+             1 require int count=0;
+             2 require short page=0;
+             3 optional string str;
+             4 require vector<SimpleStruct> ss;
+             5 require SimpleStruct rs;
+             6 require map<string, SimpleStruct> mss;
+         };
+
+    struct InUnify {
+        0 require int amount;//金额
+        1 require string mark;//操作识别,可使用的识别为 buyProduct 购买产品;scannedBuyIntegral 积分充值;appBuyIntegral app支付补充积分;posPay pos机支付
+        2 require string remark;//支付展示说明,如:购买产品xxx
+        3 require string uuid;//用户uuid
+        4 optional string state;//用于回调返回
+        //用户支付openid 识别为buyProduct时必填
+        5 optional string openid;
+    };
+
+    struct OutUnify {
+        //支付订单号
+        0 require string ordersn;
+    };
+
+    struct Status {
+        0 require int err=0;
+        1 optional string msg;
+    };
+
+    struct InCreateMechat {
+        0 require int err;
+    };
+
+    struct InUpdateMechat {
+        0 require int err;
+    };
+
+    struct PayInfo {
+        0 require int uuid;
+        1 require string order_id;
+        2 optional string out_order_id;
+        3 require string mark;
+        4 require int amount;
+        5 require int status;
+        6 require int env_domain_id;
+        7 optional string finished_at;
+        8 require string created_at;
+        9 optional string remark;
+        10 optional string openid;
+    };
+
+    struct InOrderPage {
+        0 require int page=1;
+        1 require int rows=10;
+        2 optional string search;
+    };
+
+    struct OutOrderPage {
+        0 require int total;
+        1 optional vector<PayInfo> items;
+    };
+
+    struct InWithdraw{
+        0 require string openid;
+        1 require int amount;
+        2 optional string uuid;//用户id商家id二选一
+        3 optional int shop_id;
+    };
+
+    struct InPosBill{
+        0 optional string start_at;//搜索项:开始时间
+        1 optional string end_at;//搜索项:结束时间
+        2 optional int paymode;//搜索项:支付方式，1微信、2支付宝、3储蓄卡、4借记卡
+        3 optional int pos_id;//搜索项:pos机id
+        4 optional int page=1;//页数
+        5 optional int rows=10;//页码
+    };
+
+    struct PosBill{
+        0 require int pos_id;//pos机id
+        1 require int paymode;//支付方式，1微信、2支付宝、3储蓄卡、4借记卡
+        2 require int amount;//支付金额，单位：分
+        3 require int status;//支付状态，1，支付成功，0支付失败
+        4 require string addr;//支付定位
+        5 require string finished_at;//支付完成时间
+    };
+
+    struct OutPosBill{
+        0 require int total;//总数
+        1 require vector<PosBill> items;
+    };
+
+    struct InPosAmount{
+        0 optional string start_at;//搜索项:开始时间
+        1 optional string end_at;//搜索项:结束时间
+        2 optional int pos_id;//搜索项:pos机id
+    };
+
+    struct PosAmount{
+        0 require int pos_id;
+        1 require int amount;//支付总金额，单位：分
+    };
+
+    struct OutPosAmount{
+        0 require vector<PosAmount> items;//每个pos机对应的总金额
+    };
+
+    interface PayService
+    {
+        //测试方法
+        string test(int a,int b);
+        string testVector(int a, vector<string> v1, vector<SimpleStruct> v2, out vector<int> v3, out vector<OutStruct> v4);
+        //string testMap(short a, SimpleStruct b, map<string, string> m1, out OutStruct d, out map<int, SimpleStruct> m2);
+
+        void unify(InUnify inParams,out Status status,out OutUnify outParams);//统一下单
+        string integralWithdraw(int amount,out Status status);//积分提现 amount提现金额，单位分//todo
+
+        void createMechant(InCreateMechat inParams,out Status status);//支付商户开通//todo
+        void updateMechant(InUpdateMechat inParams,out Status status);//支付商户修改//todo
+        void mechantOverage(int shopId,out int overage);//支付商户余额//todo
+        string overageWithdraw(int amount,out Status status);//余额提现 amount提现金额，单位分//todo
+
+        void orderPages(InOrderPage inParams,out OutOrderPage outParams);//支付数据分页
+        void orderInfo(int orderId,out PayInfo outParams);//支付数据
+
+        void posBill(InPostBill inParams,out OutPosBill outParams);//pos机账单//todo
+        void posAmount(InPostAmount inParams,out OutPosAmount outParams);//用id获取pos机总账//todo
+    };
+};

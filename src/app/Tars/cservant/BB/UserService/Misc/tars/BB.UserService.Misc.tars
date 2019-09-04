@@ -1,0 +1,28 @@
+//BB.UserService.Misc obj->servants(interfaces)
+module Misc
+{
+    //输入参数通用结构体
+    struct CommonInParam {
+        0 optional int envDomainId;
+    };
+
+    //输出参数通用结构体
+    struct CommonOutParam {
+        0 require int code = 0;  //接口返回码,0正常返回
+        1 require string message = "success";  //接口返回提示信息
+    };
+
+    interface Sms
+    {
+        //发送短信
+        //手机号 to, 发送内容 content, out 是否成功 success, out 返回信息 message
+        void sendSms(CommonInParam inParam, string to, string content, string template, vector<map<string,string>> data, out CommonOutParam outParam);
+    };
+
+    interface Test
+    {
+        int testHello(string name, out string greetings);
+    };
+
+};
+

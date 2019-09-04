@@ -1,0 +1,57 @@
+module ShopService
+{
+    // 商品详情
+    struct ShopInfo{
+           0  optional  int      id;               //商家id
+           1  optional  string   thumb;            //商品主图
+           2  optional  string   name;             //商家名称
+           3  optional  string   type;             //1正式 3试用开店(体验）
+           4  optional  string   phone;            //手机号
+           5  optional  string   uid;              //商家用户的id
+           6  optional  string   expiretime;        //试用期到期时间
+           7  optional  string   pid;               //上级店铺的id
+           8  optional  string   surname;           //商家真实名字
+           9  optional  string   istrial;           //0:没有试用过店铺；1试用过店铺
+           10 optional  string   domain_id;         //域名的id
+           11 optional  string   industry_name;     //域名行业
+           12 optional   int     code;
+           13 optional  string   message;
+     };
+
+       //商品列表出参
+        struct ShopList{
+            0 optional  vector<ShopInfo> item;  //商品列表
+            1 optional  int  total;             //总数据
+            2 require   int  code;
+            3 optional  string  message;
+        };
+       //商品列表入参
+        struct PageParam{
+             0 optional   int     page;           //页数
+             1 optional   int     pageSize;       //每页数据量
+             2 optional   string  idArray;        //产品id'1,2,3'
+             3 optional   string  search;         //搜索的关键字
+        };
+        struct resultMsg{
+            0  optional int     code;
+            1  optional string  msg;
+            2  optional string data;
+        };
+        interface Shop
+        {
+            //店铺列表
+            void shopList(PageParam Param ,out ShopList List);
+            //店铺详情
+            void shopInfo(int id,out ShopInfo info);
+            //通过uuid判断店铺是否存在
+            void shopExis(string uuid,out resultMsg data);
+            //获取店铺域名domain_id
+            void shopDomainId(int shop_id,out resultMsg data);
+            //获取店铺域名appid
+            void shopGetAppid(string domain,out resultMsg data);
+            //通过uuid获取店铺信息
+            void getUuidShop(string uuid,int demain_id,out ShopInfo ShopInfo);
+            //判断该店铺是否属于他的店铺
+            void isMyShop(string uuid,int shop_id,out resultMsg data);
+        };
+};

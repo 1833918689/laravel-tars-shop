@@ -1,0 +1,119 @@
+module User
+{
+    //输入参数通用结构体
+    struct CommonInParam
+    {
+        0 optional int envDomainId;
+    };
+
+    //输出参数通用结构体
+    struct CommonOutParam
+    {
+        0 require int code = 0;  //接口返回码
+        1 require string message;  //接口返回提示信息
+    };
+
+    //时间查询结构体
+    struct TimeQueryParam
+    {
+        0 optional string startTime;
+        1 optional string endTime;
+    };
+
+
+    //简版的快速用户查询,适用于批量查询
+    struct UserBasic
+    {
+        0 optional string uuid; //uuid
+        1 optional string account; //帐户名
+        2 optional string mobile; //手机号
+        3 optional string createdAt; //创建时间
+        4 optional int envDomainId; //域名ID
+    };
+
+    //用户帐户，带密码
+    struct UserAccount
+    {
+        0 require string uuid; //uuid
+        1 require string account; //帐户名
+        3 require string mobile; //手机号
+        4 require string createdAt; //创建时间
+        5 require int envDomainId; //域名ID
+        7 require string password;//密码
+    };
+
+
+    //用户帐户，通过uuid和域名id可以确定唯一的用户信息，适用于单个查询
+    struct UserInfo
+    {
+        0 require string uuid; //uuid
+        1 require string account; //帐户名
+        2 require string nickname; //昵称
+        3 require string mobile; //手机号
+        4 require string createdAt; //创建时间
+        5 require int envDomainId; //域名ID
+        6 require string headimgurl; //用户头像
+    };
+
+    //多个用户查询
+    struct UsersQueryParam
+    {
+        0 optional vector<string> uuid;//有uuid的情况下，不再进行以下模糊搜索
+        1 optional string account;
+        2 optional string nickname;
+        3 optional string mobile;
+        4 optional TimeQueryParam createdAt;
+        5 require int envDomainId; //域名筛选
+    };
+
+    //获取单个用户（模糊查询）
+    struct UserQueryParam
+    {
+        1 optional string account;
+        2 optional string nickname;
+        3 optional string mobile;
+        4 optional TimeQueryParam createdAt;
+        5 optional int envDomainId; //域名筛选
+    };
+
+
+     //主要接口
+      interface User
+      {
+          //使用token取得一个用户的基本信息，需要登录的一般请求本接口就可以
+          //pathinfo是控制访问权限的，后续有黑名单的话，不予返回用户信息
+          //user里包含了uuid、env_domain_id等信息
+          //返回值为状态码，如401是未授权需要登录（token过期等）,非0值都代表异常
+          int getUserBasicByToken(string token, string pathinfo, out UserBasic user, out string error);
+
+          //这里用token获得用户更详细
+          int getUserInfoByToken(string token, string pathinfo, out UserInfo user, out string error);
+
+           //取得一个用户的基本信息
+           void getUserBasicByUuid(string uuid, int envDomainId, out UserBasic user, out string error);
+
+         //取得用户基本信息列表
+          void getUserBasicListByQuery(UsersQueryParam queryParam, out vector<UserBasic> list, out string error);
+
+          //取得一个用户详情
+          void getUserInfoByUuid(string uuid, int envDomainId, out UserInfo user, out string error);
+
+          //取得用户详情列表
+          void getUserInfoListByQuery(UsersQueryParam queryParam, out vector<UserInfo> list, out string error);
+
+          //取得一个用户帐户(含密码)
+          int getUserAccountByUuid(string uuid, int envDomainId, out UserAccount user, out string error);
+
+          //手机号是否注册过
+          bool mobileIsRegistered(string mobile, int envDomainId);
+
+      };
+
+      interface Register
+      {
+          void registerUsingOpenIDAndUnionID(string openID,string unionID,out string uuid, out string error);
+
+          void test(string in, out string out);
+      };
+
+};

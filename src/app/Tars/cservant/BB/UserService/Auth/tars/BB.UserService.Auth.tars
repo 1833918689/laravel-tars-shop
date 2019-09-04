@@ -1,0 +1,17 @@
+//UserHttpService使用
+module Auth
+{
+    struct TokenPackage
+    {
+        0 require string jwtToken; // token值
+        1 require string expiredAt; // 过期时间
+        2 require string refreshAfter; // 刷新时间
+    }
+
+    interface Token {
+        //微信授权后，获取用户uuid
+        int issueTokenToWechatUser(string userJsonData,int envDomainId, out TokenPackage tokenPackage, out string error);
+        int refreshToken(string jwtToken,out TokenPackage tokenPackage, out string error);
+    };
+
+};

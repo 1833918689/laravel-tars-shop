@@ -1,0 +1,77 @@
+module OrderServant
+{
+    struct resultMsg {
+        0 require string code = 200;//返回码
+        1 optional string error;//返回信息
+    };
+
+    struct InNotifyData {
+        0 require string ordersn;//订单编号
+        1 require int paid;//是否支付
+    };
+
+    //订单筛选
+    struct InSearch {
+        0 optional int page;//页码
+        1 optional int rows = 10; //每页数量
+        2 optional string search;//关键词
+        3 optional string uuid;//用户ID
+        4 optional int shop_id;//店铺ID
+        5 optional string start;//开始时间
+        6 optional string end;//结束时间
+        7 optional int order_id;//订单ID
+        8 require int env_domain_id;//域名ID
+    };
+
+//  订单商品
+    struct OrderGoods {
+        0 require string subject;//商品名称
+        1 require string attr;//商品规格
+        2 require string thumb;//商品图片
+        3 require int num;//购买数量
+        4 require float price;//商品单价
+    };
+
+//  订单详情
+    struct OutOrderInfo {
+        0 require int id;//订单id
+        1 require string ordersn;//订单编号
+        2 require string recipient;//收件人
+        3 require string address;//收货地址
+        4 require string phone;//手机号码
+        5 require string paid_at;//支付时间
+        6 require int status;//订单状态 -3、退款中；-2、订单关闭；-1，交易完成；0，等待付款；1、已付款，等待发货；2、已经发货；3、确认收货
+        7 require float amount;//订单金额
+        8 require float gift_points;//赠送积分
+        9 require vector<OrderGoods> goods;//订单商品
+    };
+
+//  订单列表
+    struct OutOrderList {
+        0 require int total;//总数
+        1 require vector<OutOrderInfo> items;//订单信息
+    };
+
+//  更新数据
+    struct InUpdateOrder {
+        0 require int id; //订单id
+        1 optional string phone; //手机号码
+        2 optional int status; //订单状态
+        3 optional string remark; //订单备注
+        4 optional string express_code; //快递单号
+    };
+
+    interface Order
+    {
+        void testInterface(string in, out string OutParams);
+        //支付订单回调接口
+        void notifyOrderPayment(InNotifyData InParam, out resultMsg OutParams);
+        //用户订单列表
+        void OrderList(InSearch InParams, out OutOrderList OrderList, out resultMsg result);
+        //订单详情
+        void OrderInfo(int id, out OutOrderInfo OrderInfo, out resultMsg result);
+        //更新订单
+        void updateOrder(InUpdateOrder InParams, out resultMsg OurParams);
+    };
+
+};

@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('service.demo', \App\Services\DemoService::class);
+        //
     }
 
     /**

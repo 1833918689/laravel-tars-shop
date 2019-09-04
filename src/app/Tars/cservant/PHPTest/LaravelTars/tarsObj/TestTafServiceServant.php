@@ -44,5 +44,10 @@ class TestTafServiceServant {
 		}
 	}
 
+    public function index()
+    {
+        
+	}
+
 }
 

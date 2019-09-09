@@ -10,7 +10,7 @@ use App\Models\Shop as store;
 use App\Models\ShopConfig as ShopConfig;
 use App\Models\TaobaoCategory;
 use App\Models\ShopStatistics;
-class ShopTcp implements ShopServant{
+class ShopTcp  implements ShopServant{
     //平台下的店铺列表
     public function shopList(PageParam $Param,ShopList &$List){
         try{

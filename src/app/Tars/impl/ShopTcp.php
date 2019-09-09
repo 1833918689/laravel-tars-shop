@@ -141,7 +141,7 @@ class ShopTcp implements ShopServant{
             $ShopInfo->code       =200;
             $ShopInfo->message    ='成功';
         }else{
-            $ShopInfo->code       =400;
+            $ShopInfo->code       =200;
             $ShopInfo->message    ='店铺不存在';
         }
         return;
@@ -157,38 +157,6 @@ class ShopTcp implements ShopServant{
             $data->code       =200;
             $data->data    =0;
             $data->msg    ='店铺不存在';
-        }
-        return;
-    }
-    //通过店铺名称搜索获取一个店铺id数组
-    public function getShopId($paramName,resultMsg &$data,&$outGetArrayId){
-        $paramas = (new store())->where('name','like','%'.$paramName.'%')->pluck('id');
-        if($paramName){
-            $data->code       =200;
-            $data->data    ='成功';
-            $data->msg    ='数据';
-            if($paramas){
-                $outGetArrayId->pushBack(1);
-                for($i=0;$i<count($paramas);$i++){
-                   $outGetArrayId->pushBack($paramas[$i]);
-                }
-            }
-        }else{
-            $data->code    =400;
-            $data->data    ='失败';
-            $data->msg    ='搜索名称不能为空';
-        }
-        return;
-    }
-    //更新数据统计表某条记录中的数据
-    public function statisticsUpdated($store_id,$type,$updated,resultMsg &$data){
-        $res=ShopStatistics::updated($store_id,$type,$updated);
-        if($res['code']==200){
-            $data->code    =200;
-            $data->data    =$res['data'];
-        }else{
-            $data->code    =$res['code'];
-            $data->data    =$res['msg'];
         }
         return;
     }

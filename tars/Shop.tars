@@ -32,6 +32,8 @@ module ShopService
              2 optional   string  idArray;        //产品id'1,2,3'
              3 optional   string  search;         //搜索的关键字
         };
+       //更新某条记录中的数据
+
         struct resultMsg{
             0  optional int     code;
             1  optional string  msg;
@@ -53,5 +55,9 @@ module ShopService
             void getUuidShop(string uuid,int demain_id,out ShopInfo ShopInfo);
             //判断该店铺是否属于他的店铺
             void isMyShop(string uuid,int shop_id,out resultMsg data);
+            //通过店铺名称搜索获取一个店铺id数组
+            void getShopId(string paramName,out resultMsg data,out vector<int> outGetArrayId);
+            //更新数据统计表某条记录中的数据
+            void statisticsUpdated(int store_id,int type, int updated,out resultMsg data);
         };
 };

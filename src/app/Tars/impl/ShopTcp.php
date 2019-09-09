@@ -180,6 +180,7 @@ class ShopTcp implements ShopServant{
         }
         return;
     }
+    
     //更新数据统计表某条记录中的数据
     public function statisticsUpdated($store_id,$type,$updated,resultMsg &$data){
         $res=ShopStatistics::updated($store_id,$type,$updated);

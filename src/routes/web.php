@@ -90,6 +90,10 @@ Route::group(['prefix' => '/Laravel/route'], function () {
         Route::any('/shopTurnJust', function() {
             return (new \App\Tars\impl\ShopHttp())->shopTurnJust();
         });
+        //查询数据统计
+        Route::any('/shopStatistics', function() {
+            return (new \App\Tars\impl\ShopHttp())->shop_statistics();
+        });
         //完善店铺信息
         Route::any('/perfectShop', function() {
             try {

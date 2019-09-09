@@ -51,5 +51,20 @@ interface ShopServant {
 	 * @return void
 	 */
 	public function isMyShop($uuid,$shop_id,resultMsg &$data);
+	/**
+	 * @param string $paramName 
+	 * @param struct $data \App\Tars\servant\ShopTcp\ShopService\ShopObj\classes\resultMsg =out=
+	 * @param vector $outGetArrayId \TARS_Vector(\TARS::INT32) =out=
+	 * @return void
+	 */
+	public function getShopId($paramName,resultMsg &$data,&$outGetArrayId);
+	/**
+	 * @param int $store_id 
+	 * @param int $type 
+	 * @param int $updated 
+	 * @param struct $data \App\Tars\servant\ShopTcp\ShopService\ShopObj\classes\resultMsg =out=
+	 * @return void
+	 */
+	public function statisticsUpdated($store_id,$type,$updated,resultMsg &$data);
 }
 

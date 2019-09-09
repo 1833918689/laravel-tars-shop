@@ -5,7 +5,14 @@
       <paths name="tars">
         <serverdata>
           <mappings>
-            <mapping deploy="/deployed/ShopHttp.ShopService/bin" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="tars (project level)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

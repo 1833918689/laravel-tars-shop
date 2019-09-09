@@ -11,6 +11,7 @@ use App\Models\ShopInfo;
 use App\Models\ShopExamineLog;
 use  App\Models\ShopMenuSettings;
 use App\Models\ShopFile;
+use App\Models\ShopStatistics;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
@@ -495,4 +496,15 @@ class ShopHttp
         }
         return  json_encode(['code'=>200,'data'=>'成功']);
     }
+    //查询数据统计
+    public function shop_statistics(){
+        $request=request();
+        $rew=$request->input('rew','15');
+        $start_time=$request->input('start_time','');
+        $end_time=$request->input('end_time','');
+        $search=$request->input('search','');
+        $data=ShopStatistics::index($rew,$start_time,$end_time,$search);
+        return  json_encode(['code'=>200,'data'=>$data]);
+    }
+
 }
